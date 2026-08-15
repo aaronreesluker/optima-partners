@@ -1,6 +1,6 @@
 import AnalyticsTracker from "@/components/AnalyticsTracker";
 import ContactCta from "@/components/ContactCta";
-import Difference from "@/components/Difference";
+import DifferenceGallery from "@/components/DifferenceGallery";
 import Footer from "@/components/Footer";
 import GlobalReach from "@/components/GlobalReach";
 import Header from "@/components/Header";
@@ -20,7 +20,7 @@ export default function Home() {
       <Header />
       <main>
         <Hero />
-        <Difference />
+        <DifferenceGallery />
         <MediaBand
           src="/media/band-1.jpg"
           alt="City skyline at dusk"

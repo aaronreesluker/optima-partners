@@ -87,7 +87,7 @@ export default function Header() {
           <Logo />
         </a>
 
-        <nav className="hidden items-center gap-8 md:flex" aria-label="Primary">
+        <nav className="hidden items-center gap-8 lg:flex" aria-label="Primary">
           {NAV_ITEMS.map((item) => (
             <a
               key={item.id}
@@ -115,7 +115,7 @@ export default function Header() {
           onClick={() => setMobileOpen((open) => !open)}
           aria-expanded={mobileOpen}
           aria-label={mobileOpen ? "Close menu" : "Open menu"}
-          className="cursor-pointer text-ink md:hidden"
+          className="cursor-pointer text-ink lg:hidden"
         >
           {mobileOpen ? (
             <X size={24} aria-hidden="true" />
@@ -126,7 +126,7 @@ export default function Header() {
       </div>
 
       {mobileOpen && (
-        <div className="border-b border-line bg-white md:hidden">
+        <div className="border-b border-line bg-white lg:hidden">
           <nav
             className="flex flex-col gap-6 px-6 py-8"
             aria-label="Mobile primary"

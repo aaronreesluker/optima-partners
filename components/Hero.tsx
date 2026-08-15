@@ -15,7 +15,7 @@ export default function Hero() {
   const words = HEADLINE.split(" ");
 
   return (
-    <section className="relative flex min-h-screen items-center overflow-hidden bg-white">
+    <section className="relative flex min-h-screen items-center overflow-hidden bg-white pt-24 md:pt-24">
       <HeroBackdrop />
       <div className="relative z-10 mx-auto w-full min-w-0 max-w-6xl px-6 text-center md:px-10">
         <FadeIn immediate>
@@ -24,7 +24,7 @@ export default function Hero() {
           </p>
         </FadeIn>
 
-        <h1 className="mx-auto mt-6 max-w-4xl text-5xl font-medium tracking-tight leading-[1.05] text-ink md:text-7xl">
+        <h1 className="mx-auto mt-4 max-w-4xl text-4xl font-medium tracking-tight leading-[1.05] text-ink md:mt-6 md:text-7xl">
           <span className="sr-only">{HEADLINE}</span>
           <span aria-hidden="true">
             {words.map((word, index) => (
@@ -51,7 +51,7 @@ export default function Hero() {
         </h1>
 
         <FadeIn immediate delay={0.45}>
-          <p className="mx-auto mt-6 max-w-2xl text-base leading-relaxed text-grey md:text-lg">
+          <p className="mx-auto mt-4 max-w-2xl text-base leading-relaxed text-grey md:mt-6 md:text-lg">
             Bespoke regulatory compliance and cybersecurity solutions for investment
             managers, boutique firms and new market entrants — every engagement
             overseen by a Partner with significant regulatory experience, commercial
@@ -60,7 +60,7 @@ export default function Hero() {
         </FadeIn>
 
         <FadeIn immediate delay={0.55}>
-          <div className="mt-10 flex flex-wrap justify-center gap-3">
+          <div className="mt-6 flex flex-wrap justify-center gap-3 md:mt-10">
             <a
               href="#contact"
               onClick={() => trackEvent("cta_hero_primary")}
@@ -79,7 +79,7 @@ export default function Hero() {
         </FadeIn>
 
         <FadeIn immediate delay={0.75}>
-          <div className="mx-auto mt-16 max-w-xl border-t border-line pt-6">
+          <div className="mx-auto mt-8 max-w-xl border-t border-line pt-6 md:mt-16">
             <p className="text-xs tracking-[0.2em] uppercase text-grey">
               Engaged with regulators including
             </p>

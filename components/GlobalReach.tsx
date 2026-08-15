@@ -135,7 +135,7 @@ export default function GlobalReach() {
               on the ground from offices in New York, London, Hong Kong,
               Dubai, Chicago and San Francisco.
             </p>
-            <div className="mt-8 grid grid-cols-2 gap-8">
+            <div className="mt-8 grid grid-cols-1 gap-8 sm:grid-cols-2">
               <div>
                 <p className="text-xs font-medium uppercase tracking-[0.2em] text-ink/60">
                   Regulators

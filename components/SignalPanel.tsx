@@ -43,19 +43,22 @@ const MESSAGES: SignalMessage[] = [
 ];
 
 type Blip = {
-  left: string;
-  top: string;
+  /** Tailwind position classes — literal strings so JIT can pick them up.
+   * SEC and AML get a compact mobile position (below sm) so they never
+   * sit under the status card, then restore their original scattered
+   * position at sm and up. */
+  pos: string;
   label: string;
   delay: number;
 };
 
 const BLIPS: Blip[] = [
-  { left: "48%", top: "22%", label: "SEC", delay: 0.4 },
-  { left: "30%", top: "34%", label: "FCA", delay: 2.1 },
-  { left: "73%", top: "58%", label: "NFA", delay: 1.2 },
-  { left: "42%", top: "70%", label: "CFTC", delay: 3.4 },
-  { left: "20%", top: "58%", label: "CYBER", delay: 4.6 },
-  { left: "55%", top: "42%", label: "AML", delay: 5.2 },
+  { pos: "left-[22%] top-[26%] sm:left-[48%] sm:top-[22%]", label: "SEC", delay: 0.4 },
+  { pos: "left-[30%] top-[34%]", label: "FCA", delay: 2.1 },
+  { pos: "left-[73%] top-[58%]", label: "NFA", delay: 1.2 },
+  { pos: "left-[42%] top-[70%]", label: "CFTC", delay: 3.4 },
+  { pos: "left-[20%] top-[58%]", label: "CYBER", delay: 4.6 },
+  { pos: "left-[30%] top-[50%] sm:left-[55%] sm:top-[42%]", label: "AML", delay: 5.2 },
 ];
 
 const RING_RADII = [70, 140, 210, 280];
@@ -94,7 +97,7 @@ export default function SignalPanel() {
   return (
     <div
       aria-hidden="true"
-      className="relative w-full overflow-hidden rounded-[24px] border border-line bg-ink aspect-[4/3] sm:aspect-[16/7]"
+      className="relative w-full overflow-hidden rounded-[24px] border border-line bg-ink aspect-square sm:aspect-[4/3] lg:aspect-[16/7]"
     >
       <svg className="absolute inset-0 h-full w-full">
         <defs>
@@ -180,8 +183,7 @@ export default function SignalPanel() {
       {BLIPS.map((blip) => (
         <div
           key={blip.label}
-          className="absolute flex -translate-x-1/2 -translate-y-1/2 items-center gap-1.5"
-          style={{ left: blip.left, top: blip.top }}
+          className={`absolute flex -translate-x-1/2 -translate-y-1/2 items-center gap-1 sm:gap-1.5 ${blip.pos}`}
         >
           <span className="relative flex h-2 w-2 items-center justify-center">
             {!reduceMotion && (
@@ -216,14 +218,14 @@ export default function SignalPanel() {
               }
             />
           </span>
-          <span className="text-[9px] font-medium uppercase tracking-[0.2em] text-white/50">
+          <span className="whitespace-nowrap text-[7px] font-medium uppercase tracking-[0.1em] text-white/50 sm:text-[8px] lg:text-[9px] lg:tracking-[0.2em]">
             {blip.label}
           </span>
         </div>
       ))}
 
       <motion.div
-        className="absolute right-[6%] top-[16%] w-[260px] rounded-xl border border-white/15 bg-white/10 p-4 backdrop-blur sm:right-[10%] sm:top-[20%] sm:w-[280px]"
+        className="absolute right-[4%] top-[5%] w-[190px] rounded-xl border border-white/15 bg-white/10 p-3 backdrop-blur lg:right-[10%] lg:top-[20%] lg:w-[280px] lg:p-4"
         initial={cardInitial}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
@@ -237,7 +239,7 @@ export default function SignalPanel() {
               : { duration: 5, repeat: Infinity, ease: "easeInOut" }
           }
         >
-          <div className="min-h-[92px]">
+          <div className="min-h-[78px] lg:min-h-[92px]">
             <AnimatePresence mode="wait">
               <motion.div
                 key={cycle}
@@ -246,22 +248,27 @@ export default function SignalPanel() {
                 exit={reduceMotion ? undefined : { opacity: 0, y: -10 }}
                 transition={{ duration: reduceMotion ? 0 : 0.35 }}
               >
-                <div className="flex items-center gap-2">
+                <div className="flex items-center gap-1.5 lg:gap-2">
+                  <Icon
+                    size={14}
+                    strokeWidth={1.5}
+                    className="shrink-0 text-brand-light lg:hidden"
+                  />
                   <Icon
                     size={16}
                     strokeWidth={1.5}
-                    className="text-brand-light"
+                    className="hidden shrink-0 text-brand-light lg:block"
                   />
-                  <span className="text-sm font-medium text-white">
+                  <span className="text-xs font-medium text-white lg:text-sm">
                     {message.title}
                   </span>
                 </div>
-                <p className="mt-2 text-sm text-white/60">{message.body}</p>
+                <p className="mt-1.5 text-xs text-white/60 lg:mt-2 lg:text-sm">{message.body}</p>
               </motion.div>
             </AnimatePresence>
           </div>
 
-          <div className="mt-3 h-0.5 w-full overflow-hidden rounded-full bg-white/10">
+          <div className="mt-2 h-0.5 w-full overflow-hidden rounded-full bg-white/10 lg:mt-3">
             <motion.div
               key={cycle}
               className="h-full w-full origin-left rounded-full"
@@ -280,14 +287,14 @@ export default function SignalPanel() {
       </motion.div>
 
       <motion.div
-        className="absolute bottom-[14%] right-[8%] flex items-center gap-2 rounded-full border border-white/15 bg-white/10 px-3 py-2 backdrop-blur"
+        className="absolute bottom-[4%] right-[4%] flex items-center gap-1.5 rounded-full border border-white/15 bg-white/10 px-2.5 py-1.5 backdrop-blur lg:bottom-[14%] lg:right-[8%] lg:gap-2 lg:px-3 lg:py-2"
         initial={chipInitial}
         whileInView={{ opacity: 1, scale: 1 }}
         viewport={{ once: true }}
         transition={chipTransition}
       >
         <motion.div
-          className="flex items-center gap-2"
+          className="flex items-center gap-1.5 lg:gap-2"
           animate={reduceMotion ? undefined : { y: [0, -5, 0] }}
           transition={
             reduceMotion
@@ -295,18 +302,19 @@ export default function SignalPanel() {
               : { duration: 6, repeat: Infinity, ease: "easeInOut" }
           }
         >
-          <span className="flex h-5 w-5 items-center justify-center rounded-full bg-brand">
-            <Check size={12} strokeWidth={2.5} className="text-white" />
+          <span className="flex h-4 w-4 shrink-0 items-center justify-center rounded-full bg-brand lg:h-5 lg:w-5">
+            <Check size={10} strokeWidth={2.5} className="text-white lg:hidden" />
+            <Check size={12} strokeWidth={2.5} className="hidden text-white lg:block" />
           </span>
-          <span className="text-xs font-medium text-white">
+          <span className="whitespace-nowrap text-[10px] font-medium text-white lg:text-xs">
             Examination ready
           </span>
         </motion.div>
       </motion.div>
 
-      <div className="absolute left-[6%] top-[16%] flex items-center gap-2 sm:left-[8%]">
+      <div className="absolute left-[4%] top-[4%] flex items-center gap-1.5 lg:left-[8%] lg:top-[16%] lg:gap-2">
         <motion.span
-          className="h-1.5 w-1.5 rounded-full bg-brand-light"
+          className="h-1.5 w-1.5 shrink-0 rounded-full bg-brand-light"
           initial={reduceMotion ? { opacity: 1 } : { opacity: 0.4 }}
           animate={reduceMotion ? { opacity: 1 } : { opacity: [0.4, 1, 0.4] }}
           transition={
@@ -315,7 +323,7 @@ export default function SignalPanel() {
               : { duration: 2, repeat: Infinity, ease: "easeInOut" }
           }
         />
-        <span className="text-[10px] font-medium uppercase tracking-[0.25em] text-white/50">
+        <span className="whitespace-nowrap text-[8px] font-medium uppercase tracking-[0.15em] text-white/50 lg:text-[10px] lg:tracking-[0.25em]">
           Live monitoring
         </span>
       </div>
