@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { Menu, X } from "lucide-react";
+import Logo from "@/components/Logo";
 import { trackEvent } from "@/lib/analytics";
 
 const NAV_ITEMS = [
@@ -69,10 +70,10 @@ export default function Header() {
         <a
           href="#"
           onClick={scrollToTop}
-          className="cursor-pointer text-lg tracking-tight"
+          aria-label="Optima — back to top"
+          className="cursor-pointer"
         >
-          <span className="font-semibold">Optima</span>{" "}
-          <span className="font-normal text-grey">Partners</span>
+          <Logo />
         </a>
 
         <nav className="hidden items-center gap-8 md:flex" aria-label="Primary">

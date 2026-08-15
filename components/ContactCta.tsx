@@ -12,8 +12,9 @@ export default function ContactCta() {
             Partner with confidence.
           </h2>
           <p className="mx-auto mt-6 max-w-xl text-base leading-relaxed text-grey md:text-lg">
-            Speak with a partner about your firm&apos;s regulatory and cybersecurity
-            risk profile.
+            Speak with one of our Partners about your firm&apos;s regulatory and
+            cybersecurity risk profile — and how we can position your business for
+            success in an increasingly complex regulatory environment.
           </p>
           <div className="mt-10">
             <a

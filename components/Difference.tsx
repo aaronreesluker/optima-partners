@@ -17,18 +17,18 @@ type DifferenceCard = {
 
 const CARDS: DifferenceCard[] = [
   {
-    title: "Partner-Led, Not Delegated",
-    body: "Every engagement is overseen directly by a partner with regulatory and sector experience. Nothing is handed down to a junior team to run at arm's length.",
+    title: "Led by Experience",
+    body: "Every client engagement is overseen by one of our Partners, bringing significant regulatory experience, commercial acumen and sector-specific expertise to every stage. Nothing is handed down to a junior team to run at arm’s length.",
     icon: UserCheck,
   },
   {
-    title: "Built Around Your Risk Profile",
-    body: "Solutions are shaped to the specific regulatory exposure and operating model of your firm. There is no templated compliance package on our shelf.",
+    title: "Tailored Solutions",
+    body: "Strategic regulatory compliance and cybersecurity solutions, designed specifically for your regulatory risk profile and operating model. There is no templated compliance package on our shelf.",
     icon: SlidersHorizontal,
   },
   {
-    title: "Ahead of the Regulation, Not Behind It",
-    body: "We track regulatory change as it develops and engage clients early. By the time an expectation hardens into an examination question, our clients have already answered it.",
+    title: "Proactive by Design",
+    body: "Leveraging our network and industry intelligence, we monitor the evolution of the regulatory environment and engage clients early. By the time an expectation hardens into an examination question, our clients are already ahead of the curve.",
     icon: TrendingUp,
   },
 ];
@@ -40,7 +40,7 @@ export default function Difference() {
         <div className="mx-auto max-w-2xl text-center">
           <FadeIn>
             <p className="text-xs font-medium uppercase tracking-[0.25em] text-teal">
-              01 — The Difference
+              01 — The Optima Difference
             </p>
           </FadeIn>
 

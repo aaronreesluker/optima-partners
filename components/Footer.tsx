@@ -1,4 +1,5 @@
 import { Mail } from "lucide-react";
+import Logo from "@/components/Logo";
 
 // lucide-react dropped brand glyphs, so the LinkedIn mark is inlined here.
 function LinkedInIcon({ size = 18 }: { size?: number }) {
@@ -28,10 +29,7 @@ export default function Footer() {
     <footer className="border-t border-line bg-white pt-16 pb-28 md:pb-16">
       <div className="mx-auto max-w-6xl px-6 md:px-10">
         <div className="flex flex-col gap-8 md:flex-row md:items-center md:justify-between">
-          <span className="text-base tracking-tight">
-            <span className="font-semibold">Optima</span>{" "}
-            <span className="font-normal text-grey">Partners</span>
-          </span>
+          <Logo />
 
           <nav
             className="flex flex-col gap-4 md:flex-row md:items-center md:gap-8"

@@ -52,9 +52,10 @@ export default function Hero() {
 
         <FadeIn immediate delay={0.45}>
           <p className="mx-auto mt-6 max-w-2xl text-base leading-relaxed text-grey md:text-lg">
-            Bespoke compliance and cybersecurity counsel for asset managers, boutique
-            firms and new market entrants, led by partners who have sat inside the
-            regulator&apos;s chair.
+            Bespoke regulatory compliance and cybersecurity solutions for investment
+            managers, boutique firms and new market entrants — every engagement
+            overseen by a Partner with significant regulatory experience, commercial
+            acumen and sector-specific expertise.
           </p>
         </FadeIn>
 

@@ -3,6 +3,7 @@
 import { FileCheck2, ShieldCheck, type LucideIcon } from "lucide-react";
 
 import FadeIn from "@/components/FadeIn";
+import SignalPanel from "@/components/SignalPanel";
 
 type ServiceCard = {
   title: string;
@@ -14,23 +15,23 @@ type ServiceCard = {
 const CARDS: ServiceCard[] = [
   {
     title: "Regulatory Compliance",
-    body: "From first registration to ongoing examination readiness, we build compliance programmes that stand up to regulator scrutiny — and to the way your firm actually operates.",
+    body: "From first registration through ongoing examination readiness, we design practical compliance programmes tailored to your regulatory risk profile and operating model — built to stand up to regulator scrutiny, not to sit on a shelf.",
     items: [
-      "Registration and licensing",
-      "Compliance programme design",
-      "Examination readiness",
-      "AML and financial crime frameworks",
+      "Registrations and licensing",
+      "Compliance programme design and policies",
+      "Monitoring, testing and surveillance",
+      "Examination and mock-exam readiness",
     ],
     icon: FileCheck2,
   },
   {
     title: "Cybersecurity",
-    body: "Security postures assessed against regulatory expectations, not generic benchmarks — with incident response and governance frameworks that satisfy both your security team and your examiner.",
+    body: "Security postures assessed against regulatory expectations, not generic benchmarks — with incident response and governance frameworks, including AI governance, that satisfy both your security team and your examiner.",
     items: [
-      "Risk assessment against regulatory expectations",
-      "Incident response planning",
-      "Security governance frameworks",
-      "Examiner-ready reporting",
+      "Cyber risk assessments and security reviews",
+      "Penetration testing and vulnerability assessments",
+      "Incident response planning and tabletop exercises",
+      "AI governance and acceptable use frameworks",
     ],
     icon: ShieldCheck,
   },
@@ -54,7 +55,11 @@ export default function WhatWeDo() {
           </FadeIn>
         </div>
 
-        <div className="mt-16 grid gap-6 md:grid-cols-2">
+        <FadeIn className="mt-16">
+          <SignalPanel />
+        </FadeIn>
+
+        <div className="mt-6 grid gap-6 md:grid-cols-2">
           {CARDS.map((card, index) => {
             const Icon = card.icon;
             return (
