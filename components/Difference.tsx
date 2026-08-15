@@ -1,11 +1,13 @@
 "use client";
 
+import { useEffect, useRef, useState } from "react";
 import {
   SlidersHorizontal,
   TrendingUp,
   UserCheck,
   type LucideIcon,
 } from "lucide-react";
+import { motion, useReducedMotion, useScroll, useTransform } from "framer-motion";
 
 import FadeIn from "@/components/FadeIn";
 
@@ -34,8 +36,31 @@ const CARDS: DifferenceCard[] = [
 ];
 
 export default function Difference() {
+  const reduceMotion = useReducedMotion();
+  const sectionRef = useRef<HTMLElement | null>(null);
+  const [isDesktop, setIsDesktop] = useState(false);
+
+  useEffect(() => {
+    const query = window.matchMedia("(min-width: 768px)");
+    const update = () => setIsDesktop(query.matches);
+    update();
+    query.addEventListener("change", update);
+    return () => query.removeEventListener("change", update);
+  }, []);
+
+  const { scrollYProgress } = useScroll({
+    target: sectionRef,
+    offset: ["start end", "end start"],
+  });
+  const driftX = useTransform(scrollYProgress, [0, 1], [-170, 70]);
+  const applyDrift = isDesktop && !reduceMotion;
+
   return (
-    <section id="approach" className="border-t border-line bg-white py-24 md:py-32">
+    <section
+      ref={sectionRef}
+      id="approach"
+      className="overflow-hidden border-t border-line bg-white py-24 md:py-32"
+    >
       <div className="mx-auto max-w-6xl px-6 md:px-10">
         <div className="mx-auto max-w-2xl text-center">
           <FadeIn>
@@ -51,24 +76,33 @@ export default function Difference() {
           </FadeIn>
         </div>
 
-        <div className="mt-16 grid gap-6 md:grid-cols-3">
+        <motion.div
+          className="mt-16 grid gap-6 md:flex md:gap-8"
+          style={applyDrift ? { x: driftX } : undefined}
+        >
           {CARDS.map((card, index) => {
             const Icon = card.icon;
             return (
-              <FadeIn key={card.title} delay={index * 0.12}>
-                <div className="h-full rounded-[20px] border border-line p-8 transition-all duration-300 hover:-translate-y-1 hover:border-ink/25 hover:shadow-lg hover:shadow-ink/[0.05] motion-reduce:transform-none md:p-10">
-                  <div className="flex h-12 w-12 items-center justify-center rounded-full bg-mist">
-                    <Icon aria-hidden="true" size={22} strokeWidth={1.5} className="text-ink" />
+              <FadeIn
+                key={card.title}
+                delay={index * 0.12}
+                className="md:w-[460px] md:shrink-0"
+              >
+                <div className="h-full rounded-[20px] border border-line p-8 transition-all duration-300 hover:-translate-y-1 hover:border-ink/25 hover:shadow-lg hover:shadow-ink/[0.05] motion-reduce:transform-none md:p-12">
+                  <div className="flex h-14 w-14 items-center justify-center rounded-full bg-mist">
+                    <Icon aria-hidden="true" size={24} strokeWidth={1.5} className="text-ink" />
                   </div>
-                  <h3 className="mt-6 text-lg font-medium text-ink">{card.title}</h3>
-                  <p className="mt-3 text-sm leading-relaxed text-grey md:text-base">
+                  <h3 className="mt-8 text-xl font-medium text-ink md:text-2xl">
+                    {card.title}
+                  </h3>
+                  <p className="mt-4 text-base leading-relaxed text-grey md:text-lg">
                     {card.body}
                   </p>
                 </div>
               </FadeIn>
             );
           })}
-        </div>
+        </motion.div>
       </div>
     </section>
   );

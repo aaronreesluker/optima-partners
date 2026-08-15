@@ -50,7 +50,7 @@ type Blip = {
 };
 
 const BLIPS: Blip[] = [
-  { left: "63%", top: "26%", label: "SEC", delay: 0.4 },
+  { left: "48%", top: "22%", label: "SEC", delay: 0.4 },
   { left: "30%", top: "34%", label: "FCA", delay: 2.1 },
   { left: "73%", top: "58%", label: "NFA", delay: 1.2 },
   { left: "42%", top: "70%", label: "CFTC", delay: 3.4 },
@@ -161,21 +161,20 @@ export default function SignalPanel() {
       />
 
       {!reduceMotion && (
-        <motion.div
-          className="pointer-events-none absolute rounded-full"
-          style={{
-            left: "50%",
-            top: "50%",
-            x: "-50%",
-            y: "-50%",
-            width: "200%",
-            height: "200%",
-            backgroundImage:
-              "conic-gradient(from 0deg, rgba(71,196,146,0.16), rgba(71,196,146,0.03) 55deg, transparent 70deg, transparent 360deg)",
-          }}
-          animate={{ rotate: 360 }}
-          transition={{ duration: 6, repeat: Infinity, ease: "linear" }}
-        />
+        <div
+          className="pointer-events-none absolute left-1/2 top-1/2 aspect-square -translate-x-1/2 -translate-y-1/2 overflow-hidden rounded-full"
+          style={{ height: "130%" }}
+        >
+          <motion.div
+            className="absolute inset-0"
+            style={{
+              backgroundImage:
+                "conic-gradient(from 0deg, rgba(71,196,146,0.16), rgba(71,196,146,0.03) 55deg, transparent 70deg, transparent 360deg)",
+            }}
+            animate={{ rotate: 360 }}
+            transition={{ duration: 6, repeat: Infinity, ease: "linear" }}
+          />
+        </div>
       )}
 
       {BLIPS.map((blip) => (
