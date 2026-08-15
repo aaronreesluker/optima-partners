@@ -30,7 +30,7 @@ const schema = {
 };
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://optima-concept.revivemarketing.uk"),
+  metadataBase: new URL("https://revivemarketing.ai"),
   title: "Optima Partners — Regulatory & Cybersecurity Advisory",
   description:
     "Bespoke compliance and cybersecurity counsel for asset managers, boutique firms and new market entrants, led by partners with regulator-side experience across the SEC, FCA, NFA and CFTC.",

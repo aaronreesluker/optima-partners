@@ -39,7 +39,7 @@ export default function Difference() {
       <div className="mx-auto max-w-6xl px-6 md:px-10">
         <div className="mx-auto max-w-2xl text-center">
           <FadeIn>
-            <p className="text-xs font-medium uppercase tracking-[0.25em] text-teal">
+            <p className="text-xs font-medium uppercase tracking-[0.25em] text-brand">
               01 — The Optima Difference
             </p>
           </FadeIn>

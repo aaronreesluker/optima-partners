@@ -6,6 +6,7 @@ import GlobalReach from "@/components/GlobalReach";
 import Header from "@/components/Header";
 import Hero from "@/components/Hero";
 import Insights from "@/components/Insights";
+import MediaBand from "@/components/MediaBand";
 import MobileCta from "@/components/MobileCta";
 import Proof from "@/components/Proof";
 import ScrollProgress from "@/components/ScrollProgress";
@@ -20,9 +21,19 @@ export default function Home() {
       <main>
         <Hero />
         <Difference />
+        <MediaBand
+          src="/media/band-1.jpg"
+          alt="City skyline at dusk"
+          label="Global by design"
+        />
         <WhatWeDo />
         <GlobalReach />
         <Proof />
+        <MediaBand
+          src="/media/band-2.jpg"
+          alt="Golden Gate Bridge and the San Francisco skyline"
+          label="Partner-led, worldwide"
+        />
         <Insights />
         <ContactCta />
       </main>

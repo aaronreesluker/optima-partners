@@ -26,7 +26,7 @@ export default function MobileCta() {
       <a
         href="#contact"
         onClick={() => trackEvent("cta_mobile_sticky")}
-        className="block w-full cursor-pointer rounded-full bg-ink py-3.5 text-center text-sm font-medium text-white transition-colors duration-200 hover:bg-ink/80"
+        className="block w-full cursor-pointer rounded-full bg-navy py-3.5 text-center text-sm font-medium text-white transition-colors duration-200 hover:bg-navy/85"
       >
         Request a Consultation
       </a>

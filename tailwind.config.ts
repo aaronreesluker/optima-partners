@@ -14,6 +14,8 @@ const config: Config = {
         teal: "#123C44",
         mist: "#F6F7F7",
         line: "#E7E9E8",
+        navy: "#212B5F",
+        brand: { dark: "#0E4A44", DEFAULT: "#15805E", light: "#47C492" },
       },
       fontFamily: {
         body: ["var(--font-inter)", "system-ui", "sans-serif"],

@@ -75,7 +75,7 @@ export default function HeroBackdrop() {
 
       for (const p of particles) {
         ctx.fillStyle = p.teal
-          ? "rgba(18, 60, 68, 0.55)"
+          ? "rgba(30, 138, 110, 0.6)"
           : "rgba(21, 24, 23, 0.3)";
         ctx.beginPath();
         ctx.arc(p.x, p.y, p.teal ? p.r + 0.4 : p.r, 0, Math.PI * 2);
@@ -127,7 +127,7 @@ export default function HeroBackdrop() {
       aria-hidden="true"
       className="pointer-events-none absolute inset-0 overflow-hidden"
     >
-      <div className="absolute left-1/2 top-[42%] h-[560px] w-[900px] max-w-none -translate-x-1/2 -translate-y-1/2 rounded-full bg-teal/[0.04] blur-3xl" />
+      <div className="absolute left-1/2 top-[42%] h-[560px] w-[900px] max-w-none -translate-x-1/2 -translate-y-1/2 rounded-full bg-brand/[0.05] blur-3xl" />
       <canvas ref={canvasRef} className="absolute inset-0 h-full w-full" />
     </div>
   );

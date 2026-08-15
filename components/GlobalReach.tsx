@@ -114,7 +114,7 @@ export default function GlobalReach() {
       <div className="mx-auto max-w-6xl px-6 md:px-10">
         <div className="mx-auto max-w-2xl text-center">
           <FadeIn>
-            <p className="text-xs font-medium uppercase tracking-[0.25em] text-teal">
+            <p className="text-xs font-medium uppercase tracking-[0.25em] text-brand">
               03 — Global Reach
             </p>
           </FadeIn>
@@ -143,7 +143,7 @@ export default function GlobalReach() {
                 <div className="mt-4 space-y-3">
                   {JURISDICTIONS.map((jurisdiction) => (
                     <div key={jurisdiction.code} className="flex items-center gap-3">
-                      <span aria-hidden="true" className="h-1.5 w-1.5 rounded-full bg-teal" />
+                      <span aria-hidden="true" className="h-1.5 w-1.5 rounded-full bg-brand" />
                       <span className="text-sm font-medium text-ink">{jurisdiction.code}</span>
                       <span className="text-sm text-grey">{jurisdiction.region}</span>
                     </div>
@@ -157,7 +157,7 @@ export default function GlobalReach() {
                 <div className="mt-4 space-y-3">
                   {OFFICES.map((office) => (
                     <div key={office} className="flex items-center gap-3">
-                      <span aria-hidden="true" className="h-1.5 w-1.5 rounded-full bg-teal" />
+                      <span aria-hidden="true" className="h-1.5 w-1.5 rounded-full bg-brand" />
                       <span className="text-sm text-grey">{office}</span>
                     </div>
                   ))}
@@ -203,8 +203,8 @@ export default function GlobalReach() {
                   cx="200"
                   cy="200"
                   r="186"
-                  stroke="#123C44"
-                  strokeOpacity="0.25"
+                  stroke="#1E8A6E"
+                  strokeOpacity="0.3"
                   strokeDasharray="2 7"
                   fill="none"
                 />
@@ -216,7 +216,7 @@ export default function GlobalReach() {
                     <path
                       key={arc.d}
                       d={arc.d}
-                      stroke="#123C44"
+                      stroke="#1E8A6E"
                       strokeOpacity="0.45"
                       strokeWidth="1.2"
                       fill="none"
@@ -227,7 +227,7 @@ export default function GlobalReach() {
                     <motion.path
                       key={arc.d}
                       d={arc.d}
-                      stroke="#123C44"
+                      stroke="#1E8A6E"
                       strokeOpacity="0.45"
                       strokeWidth="1.2"
                       fill="none"
@@ -242,7 +242,7 @@ export default function GlobalReach() {
               {GLOBE_DOTS.map((dot, index) =>
                 reduceMotion ? (
                   <g key={dot.label}>
-                    <circle cx={dot.cx} cy={dot.cy} r="5" fill="#123C44" opacity={dot.targetOpacity} />
+                    <circle cx={dot.cx} cy={dot.cy} r="5" fill="#15805E" opacity={dot.targetOpacity} />
                     <text
                       x={dot.labelX}
                       y={dot.labelY}
@@ -260,7 +260,7 @@ export default function GlobalReach() {
                       cx={dot.cx}
                       cy={dot.cy}
                       fill="none"
-                      stroke="#123C44"
+                      stroke="#47C492"
                       strokeWidth="1"
                       initial={{ r: 5, opacity: 0 }}
                       whileInView={{ r: [5, 18], opacity: [0.45, 0] }}
@@ -276,7 +276,7 @@ export default function GlobalReach() {
                       cx={dot.cx}
                       cy={dot.cy}
                       r="5"
-                      fill="#123C44"
+                      fill="#15805E"
                       initial={{ opacity: 0 }}
                       whileInView={{ opacity: dot.targetOpacity }}
                       viewport={{ once: true }}

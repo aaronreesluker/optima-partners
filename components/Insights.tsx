@@ -20,7 +20,7 @@ export default function Insights() {
       <div className="mx-auto max-w-6xl px-6 md:px-10">
         <div className="mx-auto max-w-2xl text-center">
           <FadeIn>
-            <p className="text-xs font-medium uppercase tracking-[0.25em] text-teal">
+            <p className="text-xs font-medium uppercase tracking-[0.25em] text-brand">
               05 — Insights
             </p>
           </FadeIn>
@@ -40,7 +40,7 @@ export default function Insights() {
           {INSIGHTS.map((item, index) => (
             <FadeIn key={item.tag} delay={index * 0.12}>
               <div className="flex h-full flex-col rounded-[20px] border border-line bg-white p-8 transition-all duration-300 hover:-translate-y-1 hover:border-ink/25 hover:shadow-lg hover:shadow-ink/[0.05] motion-reduce:transform-none">
-                <p className="text-xs font-medium uppercase tracking-[0.25em] text-teal">
+                <p className="text-xs font-medium uppercase tracking-[0.25em] text-brand">
                   {item.tag}
                 </p>
                 <h3 className="mt-4 text-lg font-medium leading-snug text-ink">
@@ -54,7 +54,7 @@ export default function Insights() {
                       e.preventDefault();
                       trackEvent("insight_card_click", { headline: item.headline });
                     }}
-                    className="cursor-pointer text-sm font-medium text-ink underline decoration-line underline-offset-4 transition-colors duration-200 hover:text-teal hover:decoration-teal"
+                    className="cursor-pointer text-sm font-medium text-ink underline decoration-line underline-offset-4 transition-colors duration-200 hover:text-brand-dark hover:decoration-brand"
                   >
                     Read more
                   </a>

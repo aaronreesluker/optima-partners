@@ -20,7 +20,7 @@ export default function ContactCta() {
             <a
               href="mailto:enquiries@example.com?subject=Consultation%20request"
               onClick={() => trackEvent("cta_footer_primary")}
-              className="cursor-pointer inline-block rounded-full bg-ink px-8 py-4 text-sm font-medium text-white transition-all duration-200 hover:-translate-y-0.5 hover:bg-ink/85 active:translate-y-0 motion-reduce:transform-none"
+              className="cursor-pointer inline-block rounded-full bg-navy px-8 py-4 text-sm font-medium text-white transition-all duration-200 hover:-translate-y-0.5 hover:bg-navy/85 active:translate-y-0 motion-reduce:transform-none"
             >
               Request a Consultation
             </a>
@@ -28,7 +28,7 @@ export default function ContactCta() {
           <a
             href="mailto:enquiries@example.com?subject=Consultation%20request"
             onClick={() => trackEvent("cta_footer_secondary")}
-            className="mt-6 block cursor-pointer text-sm text-grey underline decoration-line underline-offset-4 transition-colors duration-200 hover:text-teal hover:decoration-teal"
+            className="mt-6 block cursor-pointer text-sm text-grey underline decoration-line underline-offset-4 transition-colors duration-200 hover:text-brand-dark hover:decoration-brand"
           >
             Email the Team
           </a>

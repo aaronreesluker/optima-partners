@@ -84,8 +84,16 @@ export default function Footer() {
         </div>
 
         <p className="mt-4 text-xs text-grey/60">
-          Concept build by Revive Marketing Management — not a live Optima
-          Partners property.
+          Concept build by{" "}
+          <a
+            href="https://revivemarketing.ai"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="cursor-pointer underline underline-offset-2 transition-colors duration-200 hover:text-ink"
+          >
+            Revive Marketing Management
+          </a>{" "}
+          — not a live Optima Partners property.
         </p>
       </div>
     </footer>

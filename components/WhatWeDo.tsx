@@ -43,7 +43,7 @@ export default function WhatWeDo() {
       <div className="mx-auto max-w-6xl px-6 md:px-10">
         <div className="mx-auto max-w-2xl text-center">
           <FadeIn>
-            <p className="text-xs font-medium uppercase tracking-[0.25em] text-teal">
+            <p className="text-xs font-medium uppercase tracking-[0.25em] text-brand">
               02 — What We Do
             </p>
           </FadeIn>
@@ -79,7 +79,7 @@ export default function WhatWeDo() {
                       <li key={item} className="flex items-start gap-3">
                         <span
                           aria-hidden="true"
-                          className="mt-[0.55em] h-1.5 w-1.5 shrink-0 rounded-full bg-teal"
+                          className="mt-[0.55em] h-1.5 w-1.5 shrink-0 rounded-full bg-brand"
                         />
                         <span className="text-sm text-grey">{item}</span>
                       </li>
@@ -87,7 +87,7 @@ export default function WhatWeDo() {
                   </ul>
                   <a
                     href="#contact"
-                    className="mt-8 inline-block cursor-pointer text-sm font-medium text-ink underline decoration-line underline-offset-4 transition-colors duration-200 hover:text-teal hover:decoration-teal"
+                    className="mt-8 inline-block cursor-pointer text-sm font-medium text-ink underline decoration-line underline-offset-4 transition-colors duration-200 hover:text-brand-dark hover:decoration-brand"
                   >
                     Learn more
                   </a>

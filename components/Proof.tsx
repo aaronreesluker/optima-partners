@@ -7,7 +7,7 @@ export default function Proof() {
     <section className="border-t border-line bg-white py-24 md:py-32">
       <div className="mx-auto max-w-6xl px-6 md:px-10">
         <FadeIn className="mx-auto max-w-3xl text-center">
-          <p className="text-xs font-medium uppercase tracking-[0.25em] text-teal">
+          <p className="text-xs font-medium uppercase tracking-[0.25em] text-brand">
             Client testimonial — reserved
           </p>
           <blockquote className="mt-8 text-2xl font-light leading-snug text-ink/50 md:text-3xl">

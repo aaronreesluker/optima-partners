@@ -19,7 +19,7 @@ export default function Hero() {
       <HeroBackdrop />
       <div className="relative z-10 mx-auto w-full min-w-0 max-w-6xl px-6 text-center md:px-10">
         <FadeIn immediate>
-          <p className="text-xs font-medium tracking-[0.25em] uppercase text-teal">
+          <p className="text-xs font-medium tracking-[0.25em] uppercase text-brand">
             Regulatory &amp; Cybersecurity Advisory
           </p>
         </FadeIn>
@@ -64,7 +64,7 @@ export default function Hero() {
             <a
               href="#contact"
               onClick={() => trackEvent("cta_hero_primary")}
-              className="cursor-pointer rounded-full bg-ink px-7 py-3.5 text-sm font-medium text-white transition-all duration-200 hover:-translate-y-0.5 hover:bg-ink/85 active:translate-y-0 motion-reduce:transform-none"
+              className="cursor-pointer rounded-full bg-navy px-7 py-3.5 text-sm font-medium text-white transition-all duration-200 hover:-translate-y-0.5 hover:bg-navy/85 active:translate-y-0 motion-reduce:transform-none"
             >
               Request a Consultation
             </a>
@@ -108,7 +108,7 @@ export default function Hero() {
                           {name}
                           <span
                             aria-hidden="true"
-                            className="h-1 w-1 rounded-full bg-teal/60"
+                            className="h-1 w-1 rounded-full bg-brand/70"
                           />
                         </span>
                       ))}
