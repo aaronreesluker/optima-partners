@@ -1,5 +1,7 @@
 "use client";
 
+import { useState } from "react";
+
 import { motion, useReducedMotion } from "framer-motion";
 
 import FadeIn from "@/components/FadeIn";
@@ -108,6 +110,8 @@ const LAND_DOTS = buildLandDots();
 
 export default function GlobalReach() {
   const reduceMotion = useReducedMotion();
+  const [focused, setFocused] = useState<string | null>(null);
+  const focusedDot = GLOBE_DOTS.find((d) => d.label === focused) ?? null;
 
   return (
     <section id="global-reach" className="border-t border-line bg-white py-24 md:py-32">
@@ -155,12 +159,29 @@ export default function GlobalReach() {
                   Offices
                 </p>
                 <div className="mt-4 space-y-3">
-                  {OFFICES.map((office) => (
-                    <div key={office} className="flex items-center gap-3">
-                      <span aria-hidden="true" className="h-1.5 w-1.5 rounded-full bg-brand" />
-                      <span className="text-sm text-grey">{office}</span>
-                    </div>
-                  ))}
+                  {OFFICES.map((office) => {
+                    const isFocused = focused === office.toUpperCase();
+                    return (
+                      <button
+                        key={office}
+                        type="button"
+                        onMouseEnter={() => setFocused(office.toUpperCase())}
+                        onFocus={() => setFocused(office.toUpperCase())}
+                        onMouseLeave={() => setFocused(null)}
+                        onBlur={() => setFocused(null)}
+                        aria-label={`Highlight ${office} on the globe`}
+                        className="flex items-center gap-3 w-full cursor-pointer text-left transition-colors duration-200"
+                      >
+                        <span
+                          aria-hidden="true"
+                          className={`h-1.5 w-1.5 rounded-full ${isFocused ? "bg-brand-light" : "bg-brand"}`}
+                        />
+                        <span className={`text-sm ${isFocused ? "font-medium text-ink" : "text-grey"}`}>
+                          {office}
+                        </span>
+                      </button>
+                    );
+                  })}
                 </div>
               </div>
             </div>
@@ -173,6 +194,18 @@ export default function GlobalReach() {
               className="mx-auto aspect-square w-full max-w-md"
               fill="none"
             >
+              <motion.g
+                animate={{
+                  rotate: focusedDot ? (200 - focusedDot.cx) * 0.06 : 0,
+                  scale: focusedDot ? 1.05 : 1,
+                }}
+                transition={
+                  reduceMotion
+                    ? { duration: 0 }
+                    : { type: "spring", stiffness: 90, damping: 20 }
+                }
+                style={{ transformBox: "fill-box", transformOrigin: "center" }}
+              >
               {/* Dotted-halftone land masses, beneath the graticule */}
               {LAND_DOTS.map((d) => (
                 <circle key={`${d.x}-${d.y}`} cx={d.x} cy={d.y} r={1.3} fill="#151817" opacity={d.o} />
@@ -241,21 +274,36 @@ export default function GlobalReach() {
 
               {GLOBE_DOTS.map((dot, index) =>
                 reduceMotion ? (
-                  <g key={dot.label}>
-                    <circle cx={dot.cx} cy={dot.cy} r="5" fill="#15805E" opacity={dot.targetOpacity} />
+                  <motion.g
+                    key={dot.label}
+                    animate={{ opacity: focused && focused !== dot.label ? 0.3 : 1 }}
+                    transition={{ duration: 0.25 }}
+                  >
+                    <circle
+                      cx={dot.cx}
+                      cy={dot.cy}
+                      r={focused === dot.label ? 7.5 : 5}
+                      fill="#15805E"
+                      opacity={dot.targetOpacity}
+                    />
                     <text
                       x={dot.labelX}
                       y={dot.labelY}
                       textAnchor={dot.anchor}
                       fontSize={10}
                       letterSpacing="1.5"
-                      fill="#6E7573"
+                      fill={focused === dot.label ? "#151817" : "#6E7573"}
+                      fontWeight={focused === dot.label ? 600 : 400}
                     >
                       {dot.label}
                     </text>
-                  </g>
+                  </motion.g>
                 ) : (
-                  <g key={dot.label}>
+                  <motion.g
+                    key={dot.label}
+                    animate={{ opacity: focused && focused !== dot.label ? 0.3 : 1 }}
+                    transition={{ duration: 0.25 }}
+                  >
                     <motion.circle
                       cx={dot.cx}
                       cy={dot.cy}
@@ -275,10 +323,10 @@ export default function GlobalReach() {
                     <motion.circle
                       cx={dot.cx}
                       cy={dot.cy}
-                      r="5"
                       fill="#15805E"
                       initial={{ opacity: 0 }}
                       whileInView={{ opacity: dot.targetOpacity }}
+                      animate={{ r: focused === dot.label ? 7.5 : 5 }}
                       viewport={{ once: true }}
                       transition={{ delay: 0.15 * index, duration: 0.3 }}
                     />
@@ -288,7 +336,8 @@ export default function GlobalReach() {
                       textAnchor={dot.anchor}
                       fontSize={10}
                       letterSpacing="1.5"
-                      fill="#6E7573"
+                      fill={focused === dot.label ? "#151817" : "#6E7573"}
+                      fontWeight={focused === dot.label ? 600 : 400}
                       initial={{ opacity: 0 }}
                       whileInView={{ opacity: 1 }}
                       viewport={{ once: true }}
@@ -296,9 +345,30 @@ export default function GlobalReach() {
                     >
                       {dot.label}
                     </motion.text>
-                  </g>
+                  </motion.g>
                 ),
               )}
+
+              {/* Targeting reticle: glides to the focused office marker */}
+              <motion.g
+                animate={{
+                  x: focusedDot ? focusedDot.cx : 200,
+                  y: focusedDot ? focusedDot.cy : 200,
+                  opacity: focusedDot ? 1 : 0,
+                }}
+                transition={
+                  reduceMotion
+                    ? { duration: 0 }
+                    : { type: "spring", stiffness: 120, damping: 22 }
+                }
+              >
+                <circle r={13} stroke="#47C492" strokeWidth={1} strokeDasharray="3 4" fill="none" />
+                <line x1={0} y1={-15} x2={0} y2={-20} stroke="#47C492" strokeWidth={1} />
+                <line x1={0} y1={15} x2={0} y2={20} stroke="#47C492" strokeWidth={1} />
+                <line x1={-15} y1={0} x2={-20} y2={0} stroke="#47C492" strokeWidth={1} />
+                <line x1={15} y1={0} x2={20} y2={0} stroke="#47C492" strokeWidth={1} />
+              </motion.g>
+              </motion.g>
             </svg>
           </FadeIn>
         </div>

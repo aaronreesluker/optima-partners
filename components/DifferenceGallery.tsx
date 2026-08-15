@@ -7,7 +7,14 @@ import {
   UserCheck,
   type LucideIcon,
 } from "lucide-react";
-import { motion, useReducedMotion, useScroll, useTransform } from "framer-motion";
+import {
+  motion,
+  useMotionValueEvent,
+  useReducedMotion,
+  useScroll,
+  useSpring,
+  useTransform,
+} from "framer-motion";
 
 import FadeIn from "@/components/FadeIn";
 
@@ -92,6 +99,7 @@ function PinnedGallery() {
   const viewportRef = useRef<HTMLDivElement | null>(null);
   const rowRef = useRef<HTMLDivElement | null>(null);
   const [startX, setStartX] = useState(0);
+  const [active, setActive] = useState(0);
 
   const { scrollYProgress } = useScroll({
     target: sectionRef,
@@ -114,27 +122,70 @@ function PinnedGallery() {
   const x = useTransform(scrollYProgress, [0.12, 0.88], [startX, 0], {
     clamp: true,
   });
+  const xSpring = useSpring(x, { stiffness: 120, damping: 28, mass: 0.5 });
+
+  const progress = useTransform(scrollYProgress, [0.12, 0.88], [0, 1], {
+    clamp: true,
+  });
+  const progressSpring = useSpring(progress, {
+    stiffness: 140,
+    damping: 30,
+    mass: 0.4,
+  });
+
+  useMotionValueEvent(scrollYProgress, "change", (value) => {
+    const travelled = Math.min(1, Math.max(0, (value - 0.12) / 0.76));
+    setActive(travelled < 0.34 ? 0 : travelled < 0.67 ? 1 : 2);
+  });
+
+  const activeNumber = String(active + 1).padStart(2, "0");
 
   return (
     <section
       ref={sectionRef}
       id="approach"
       className="relative border-t border-line bg-white"
-      style={{ height: "300vh" }}
+      style={{ height: "320vh" }}
     >
       <div className="sticky top-0 flex h-screen flex-col justify-center overflow-hidden">
         <GalleryHeader />
 
         <div ref={viewportRef} className="px-6 md:px-10">
-          <motion.div ref={rowRef} className="flex gap-8" style={{ x }}>
-            {REVERSED_CARDS.map((card) => (
-              <DifferenceCardPanel
-                key={card.title}
-                card={card}
-                sizeClassName="w-[560px] xl:w-[620px] shrink-0"
-              />
-            ))}
+          <motion.div ref={rowRef} className="flex gap-8" style={{ x: xSpring }}>
+            {REVERSED_CARDS.map((card, reversedIndex) => {
+              const pillarIndex = REVERSED_CARDS.length - 1 - reversedIndex;
+              const isActive = pillarIndex === active;
+              return (
+                <motion.div
+                  key={card.title}
+                  className="w-[560px] shrink-0 xl:w-[620px]"
+                  animate={{
+                    scale: isActive ? 1 : 0.96,
+                    opacity: isActive ? 1 : 0.55,
+                  }}
+                  transition={{ type: "spring", stiffness: 200, damping: 30 }}
+                >
+                  <DifferenceCardPanel card={card} sizeClassName="h-full w-full" />
+                </motion.div>
+              );
+            })}
           </motion.div>
+        </div>
+
+        <div className="mx-auto mt-12 flex w-full max-w-6xl items-center gap-6 px-6 md:px-10">
+          <p className="text-xs font-medium tracking-[0.25em]">
+            <span className="text-ink">{activeNumber}</span>
+            <span className="text-grey"> / 03</span>
+          </p>
+          <div className="h-px w-44 overflow-hidden rounded-full bg-line">
+            <motion.div
+              className="h-full w-full origin-left"
+              style={{
+                scaleX: progressSpring,
+                backgroundImage: "linear-gradient(90deg, #0E4A44, #1E8A6E, #47C492)",
+              }}
+            />
+          </div>
         </div>
       </div>
     </section>

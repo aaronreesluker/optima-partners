@@ -18,7 +18,7 @@ export default function MediaBand({ src, alt, label }: MediaBandProps) {
     target: ref,
     offset: ["start end", "end start"],
   });
-  const y = useTransform(scrollYProgress, [0, 1], ["-4%", "4%"]);
+  const y = useTransform(scrollYProgress, [0, 1], ["-9%", "9%"]);
 
   return (
     <section className="bg-white py-6 md:py-10">
@@ -32,7 +32,7 @@ export default function MediaBand({ src, alt, label }: MediaBandProps) {
             style={
               reduceMotion
                 ? { scale: 1 }
-                : { scale: 1.1, y }
+                : { scale: 1.2, y }
             }
           >
             <Image
