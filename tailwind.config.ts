@@ -22,14 +22,13 @@ const config: Config = {
         display: ["var(--font-inter)", "system-ui", "sans-serif"],
       },
       keyframes: {
-        "marker-pulse": {
-          "0%": { transform: "scale(0.8)", opacity: "0.55" },
-          "70%": { transform: "scale(2.4)", opacity: "0" },
-          "100%": { transform: "scale(2.4)", opacity: "0" },
+        "marker-orbit": {
+          "0%": { transform: "rotate(0deg)" },
+          "100%": { transform: "rotate(360deg)" },
         },
       },
       animation: {
-        "marker-pulse": "marker-pulse 1.8s ease-out infinite",
+        "marker-orbit": "marker-orbit 2.2s linear infinite",
       },
     },
   },

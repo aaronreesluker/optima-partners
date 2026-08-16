@@ -133,13 +133,19 @@ export default function GlobalReach() {
 
   const containerRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const markerElRefs = useRef<(HTMLDivElement | null)[]>([]);
+  const markerElRefs = useRef<(HTMLButtonElement | null)[]>([]);
 
   const focusedRef = useRef<string | null>(null);
   const reduceMotionRef = useRef(false);
   const widthRef = useRef(0);
   const pointerInteracting = useRef<number | null>(null);
   const pointerInteractionMovement = useRef(0);
+  // Marker focus is latched (see handleMarkerEnter/handleContainerLeave
+  // below) so that easing the globe toward a hovered city can't move the
+  // marker out from under the cursor and re-trigger mouseenter/mouseleave
+  // in a feedback loop. lastClearAt guards against a focus re-set that
+  // lands immediately after a clear (e.g. right at the container edge).
+  const lastClearAt = useRef(0);
 
   useEffect(() => {
     focusedRef.current = focused;
@@ -174,6 +180,10 @@ export default function GlobalReach() {
         const projection = projectMarker(OFFICE_VECTORS[index], phi, theta, radius);
         el.style.transform = `translate(${projection.x}px, ${projection.y}px) translate(-50%, -50%) scale(${projection.scale})`;
         el.style.opacity = String(projection.opacity);
+        // Only the currently visible (near-side) marker should be able to
+        // receive pointer events — far-side/limb-hidden markers sit at the
+        // same DOM stacking position and would otherwise swallow hovers.
+        el.style.pointerEvents = projection.opacity > 0 ? "auto" : "none";
       }
     };
 
@@ -258,6 +268,22 @@ export default function GlobalReach() {
     }
   };
 
+  // Hovering a marker latches focus on; it is only cleared by leaving the
+  // whole globe container (see the container's onMouseLeave below), never
+  // by the marker's own mouseleave. Without this, easing the globe toward
+  // the hovered city drags the marker out from under a stationary cursor,
+  // firing mouseleave -> clearing focus -> easing back -> mouseenter again,
+  // which reads as flicker/jitter.
+  const handleMarkerEnter = (name: string) => {
+    if (performance.now() - lastClearAt.current < 80) return;
+    setFocused(name);
+  };
+
+  const handleContainerLeave = () => {
+    lastClearAt.current = performance.now();
+    setFocused(null);
+  };
+
   return (
     <section id="global-reach" className="border-t border-line bg-white py-24 md:py-32">
       <div className="mx-auto max-w-6xl px-6 md:px-10">
@@ -335,6 +361,7 @@ export default function GlobalReach() {
           <FadeIn delay={0.15}>
             <div
               ref={containerRef}
+              onMouseLeave={handleContainerLeave}
               className="relative mx-auto aspect-square w-full max-w-md"
             >
               <canvas
@@ -356,32 +383,61 @@ export default function GlobalReach() {
 
               {OFFICES.map((office, index) => {
                 const isFocused = focused === office.name;
+                const gradientId = `optima-marker-grad-${index}`;
                 return (
-                  <div
+                  <button
                     key={office.name}
                     ref={(el) => {
                       markerElRefs.current[index] = el;
                     }}
-                    aria-hidden="true"
-                    className="pointer-events-none absolute left-0 top-0 opacity-0"
+                    type="button"
+                    aria-label={`Highlight ${office.name} on the globe`}
+                    onMouseEnter={() => handleMarkerEnter(office.name)}
+                    onFocus={() => setFocused(office.name)}
+                    onBlur={() => setFocused(null)}
+                    className="absolute left-0 top-0 flex h-7 w-7 cursor-pointer appearance-none items-center justify-center rounded-full border-0 bg-transparent p-0 opacity-0"
                   >
                     <span className="relative flex items-center justify-center">
-                      {isFocused ? (
-                        <span
-                          aria-hidden="true"
-                          className="absolute h-[18px] w-[18px] rounded-full bg-brand-light/60 motion-safe:animate-marker-pulse motion-reduce:animate-none"
-                        />
-                      ) : null}
-                      <span
-                        className={`rounded-full border-[2.5px] bg-transparent transition-[width,height,border-color] duration-300 ease-out ${
-                          isFocused
-                            ? "h-[18px] w-[18px] border-brand-light"
-                            : "h-[10px] w-[10px] border-brand"
+                      <svg
+                        viewBox="0 0 32 32"
+                        aria-hidden="true"
+                        className={`overflow-visible transition-[width,height] duration-300 ease-out ${
+                          isFocused ? "h-[22px] w-[22px]" : "h-[13px] w-[13px]"
                         }`}
-                        style={{ boxShadow: "0 0 0 2px rgba(255,255,255,0.85)" }}
-                      />
+                        style={{ filter: "drop-shadow(0 0 1.5px rgba(255,255,255,0.95))" }}
+                      >
+                        <defs>
+                          <linearGradient id={gradientId} x1="15%" y1="90%" x2="85%" y2="10%">
+                            <stop offset="0%" stopColor="#0E4A44" />
+                            <stop offset="55%" stopColor="#1E8A6E" />
+                            <stop offset="100%" stopColor="#47C492" />
+                          </linearGradient>
+                        </defs>
+                        <circle
+                          cx="16"
+                          cy="16"
+                          r="11"
+                          fill="none"
+                          stroke={`url(#${gradientId})`}
+                          strokeWidth="8.5"
+                        />
+                        {isFocused ? (
+                          <circle
+                            cx="16"
+                            cy="16"
+                            r="15.5"
+                            fill="none"
+                            stroke="#212B5F"
+                            strokeWidth="2"
+                            strokeLinecap="round"
+                            strokeDasharray="12 85"
+                            className="motion-safe:animate-marker-orbit motion-reduce:animate-none"
+                            style={{ transformBox: "fill-box", transformOrigin: "center" }}
+                          />
+                        ) : null}
+                      </svg>
                     </span>
-                  </div>
+                  </button>
                 );
               })}
 
@@ -393,7 +449,8 @@ export default function GlobalReach() {
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, y: 8 }}
                     transition={{ duration: reduceMotion ? 0 : 0.2, ease: "easeOut" }}
-                    className="absolute bottom-4 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-full border border-line bg-white/90 px-4 py-2 text-xs font-medium uppercase tracking-[0.2em] text-ink backdrop-blur shadow-sm"
+                    style={{ left: "50%", x: "-50%" }}
+                    className="absolute bottom-4 whitespace-nowrap rounded-full border border-line bg-white/90 px-4 py-2 text-xs font-medium uppercase tracking-[0.2em] text-ink backdrop-blur shadow-sm"
                   >
                     {focused}
                   </motion.div>
