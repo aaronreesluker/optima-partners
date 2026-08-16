@@ -1,6 +1,14 @@
 "use client";
 
-import { FileCheck2, ShieldCheck, type LucideIcon } from "lucide-react";
+import {
+  Building2,
+  ClipboardCheck,
+  Gavel,
+  Rocket,
+  ShieldCheck,
+  UserCog,
+  type LucideIcon,
+} from "lucide-react";
 
 import FadeIn from "@/components/FadeIn";
 import SignalPanel from "@/components/SignalPanel";
@@ -14,26 +22,69 @@ type ServiceCard = {
 
 const CARDS: ServiceCard[] = [
   {
-    title: "Regulatory Compliance",
-    body: "From first registration through ongoing examination readiness, we design practical compliance programmes tailored to your regulatory risk profile and operating model — built to stand up to regulator scrutiny, not to sit on a shelf.",
+    title: "Pre-Launch and Launch Phase",
+    body: "For firms entering a new market or launching a fund, we manage the registrations and authorisations that get you operating, and build the policies, risk assessments and governance that anchor a compliance programme from day one.",
     items: [
-      "Registrations and licensing",
-      "Compliance programme design and policies",
-      "Monitoring, testing and surveillance",
-      "Examination and mock-exam readiness",
+      "Regulatory registrations and authorisations",
+      "Policies and procedures",
+      "Risk assessments and governance",
+      "Monitoring and testing plans",
     ],
-    icon: FileCheck2,
+    icon: Rocket,
   },
   {
-    title: "Cybersecurity",
-    body: "Security postures assessed against regulatory expectations, not generic benchmarks — with incident response and governance frameworks, including AI governance, that satisfy both your security team and your examiner.",
+    title: "Ongoing Compliance Solutions",
+    body: "Once you are live, our advisory, monitoring and testing keep your programme current — spanning thematic and annual reviews, marketing material reviews, regulatory filings and tailored training.",
+    items: [
+      "Compliance advisory and programme oversight",
+      "Monitoring, testing and surveillance",
+      "Thematic and annual compliance reviews",
+      "Regulatory filings and tailored training",
+    ],
+    icon: ClipboardCheck,
+  },
+  {
+    title: "Regulatory Exams, Enforcement and Crisis Management",
+    body: "We prepare firms for regulatory exams through mock testing, support them through live exams, reviews and enforcement matters, and provide remediation support in times of stress.",
+    items: [
+      "Mock regulatory exams",
+      "Support during exams, reviews and enforcement matters",
+      "Remediation support in times of stress",
+    ],
+    icon: Gavel,
+  },
+  {
+    title: "Project-Based and Embedded Support",
+    body: "From outsourced CCO services and secondments to regulatory change management and one-off projects, we embed the expertise you need — including compliance due diligence ahead of an acquisition or merger.",
+    items: [
+      "Outsourced CCO services",
+      "Secondments",
+      "Regulatory change management",
+      "Pre-acquisition and merger compliance due diligence",
+    ],
+    icon: UserCog,
+  },
+  {
+    title: "Cybersecurity, Risk and AI",
+    body: "We assess cyber risk and security posture, test for vulnerabilities, and build the governance, policy and AI readiness frameworks that satisfy both your security team and your examiner.",
     items: [
       "Cyber risk assessments and security reviews",
       "Penetration testing and vulnerability assessments",
+      "AI readiness assessments and governance reviews",
       "Incident response planning and tabletop exercises",
-      "AI governance and acceptable use frameworks",
     ],
     icon: ShieldCheck,
+  },
+  {
+    title: "Portfolio Company Cyber Programme",
+    body: "For private equity and venture sponsors, we assess cyber risk across the portfolio, run penetration testing and remediation planning, and give sponsors the cross-portfolio visibility and reporting they need.",
+    items: [
+      "Cyber risk assessments and red flag diligence",
+      "Penetration and security testing",
+      "Remediation roadmaps",
+      "Portfolio-wide visibility and sponsor reporting",
+    ],
+    icon: Building2,
   },
 ];
 
@@ -44,13 +95,13 @@ export default function WhatWeDo() {
         <div className="mx-auto max-w-2xl text-center">
           <FadeIn>
             <p className="text-xs font-medium uppercase tracking-[0.25em] text-brand">
-              02 — What We Do
+              04 — What We Do
             </p>
           </FadeIn>
 
           <FadeIn delay={0.1}>
             <h2 className="mt-4 text-3xl font-medium tracking-tight text-ink md:text-5xl">
-              Two disciplines, one standard of scrutiny
+              Six practice areas, one standard of scrutiny
             </h2>
           </FadeIn>
         </div>
@@ -59,7 +110,7 @@ export default function WhatWeDo() {
           <SignalPanel />
         </FadeIn>
 
-        <div className="mt-6 grid gap-6 md:grid-cols-2">
+        <div className="mt-6 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
           {CARDS.map((card, index) => {
             const Icon = card.icon;
             return (

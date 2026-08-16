@@ -290,7 +290,7 @@ export default function GlobalReach() {
         <div className="mx-auto max-w-2xl text-center">
           <FadeIn>
             <p className="text-xs font-medium uppercase tracking-[0.25em] text-brand">
-              03 — Global Reach
+              05 — Global Reach
             </p>
           </FadeIn>
 

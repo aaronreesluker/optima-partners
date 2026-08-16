@@ -1,3 +1,4 @@
+import AboutFirm from "@/components/AboutFirm";
 import AnalyticsTracker from "@/components/AnalyticsTracker";
 import ContactCta from "@/components/ContactCta";
 import DifferenceGallery from "@/components/DifferenceGallery";
@@ -11,6 +12,7 @@ import MobileCta from "@/components/MobileCta";
 import Proof from "@/components/Proof";
 import ScrollProgress from "@/components/ScrollProgress";
 import WhatWeDo from "@/components/WhatWeDo";
+import WhoWeServe from "@/components/WhoWeServe";
 
 export default function Home() {
   return (
@@ -26,6 +28,8 @@ export default function Home() {
           alt="City skyline at dusk"
           label="Global by design"
         />
+        <AboutFirm />
+        <WhoWeServe />
         <WhatWeDo />
         <GlobalReach />
         <Proof />

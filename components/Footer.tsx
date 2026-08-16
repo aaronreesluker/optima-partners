@@ -18,6 +18,7 @@ function LinkedInIcon({ size = 18 }: { size?: number }) {
 
 const NAV_ITEMS = [
   { id: "approach", label: "Approach" },
+  { id: "about", label: "About" },
   { id: "services", label: "Services" },
   { id: "global-reach", label: "Global Reach" },
   { id: "insights", label: "Insights" },
