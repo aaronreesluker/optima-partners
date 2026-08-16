@@ -28,7 +28,7 @@ export default function AboutFirm() {
           </FadeIn>
         </div>
 
-        <div className="mt-16 grid gap-12 md:grid-cols-[1.6fr_1fr] md:gap-16">
+        <div className="mt-16 grid items-start gap-12 md:grid-cols-[1.6fr_1fr] md:gap-16">
           <FadeIn>
             <div className="space-y-6 text-base leading-relaxed text-grey md:text-lg">
               <p>
@@ -62,7 +62,7 @@ export default function AboutFirm() {
             </div>
           </FadeIn>
 
-          <FadeIn delay={0.15}>
+          <FadeIn delay={0.15} className="md:sticky md:top-28 md:self-start">
             <div className="rounded-[20px] border border-line p-8 md:p-10">
               <p className="text-xs font-medium uppercase tracking-[0.25em] text-brand">
                 Firm facts
