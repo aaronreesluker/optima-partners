@@ -21,6 +21,16 @@ const config: Config = {
         body: ["var(--font-inter)", "system-ui", "sans-serif"],
         display: ["var(--font-inter)", "system-ui", "sans-serif"],
       },
+      keyframes: {
+        "marker-pulse": {
+          "0%": { transform: "scale(0.8)", opacity: "0.55" },
+          "70%": { transform: "scale(2.4)", opacity: "0" },
+          "100%": { transform: "scale(2.4)", opacity: "0" },
+        },
+      },
+      animation: {
+        "marker-pulse": "marker-pulse 1.8s ease-out infinite",
+      },
     },
   },
   plugins: [],

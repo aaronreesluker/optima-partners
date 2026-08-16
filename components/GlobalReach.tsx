@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 
-import createGlobe, { type Marker } from "cobe";
+import createGlobe from "cobe";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 
 import FadeIn from "@/components/FadeIn";
@@ -34,11 +34,21 @@ const OFFICES: Office[] = [
   { name: "San Francisco", lat: 37.77, lng: -122.42 },
 ];
 
-const MARKER_COLOR: [number, number, number] = [0.08, 0.5, 0.37];
-const MARKER_SIZE = 0.06;
-const MARKER_SIZE_FOCUSED = 0.11;
 const BASE_THETA = 0.28;
 const TAU = Math.PI * 2;
+
+// cobe renders its globe on a sphere of radius 0.8 in its internal NDC-ish
+// space, and lifts markers `markerElevation` (default 0.05, which we never
+// override) above that surface. Mirroring both constants here keeps our DOM
+// overlay projection numerically identical to cobe's own marker placement.
+const SPHERE_RADIUS = 0.8;
+const MARKER_ELEVATION = 0.05;
+const PROJECTION_RADIUS = SPHERE_RADIUS + MARKER_ELEVATION;
+
+// Depth (vz, normalized to roughly [-1, 1]) band used to roll markers around
+// the limb: fully hidden on the far side, fading/scaling in as they approach
+// vz = LIMB_FADE_END, fully opaque beyond it.
+const LIMB_FADE_END = 0.35;
 
 function locationToAngles(lat: number, long: number): [number, number] {
   return [
@@ -53,12 +63,77 @@ function shortestAngleDelta(from: number, to: number) {
   return ((delta + TAU * 1.5) % TAU) - Math.PI;
 }
 
+/**
+ * Converts lat/long (degrees) into the same unit-sphere vector cobe's own
+ * WASM/GL renderer uses internally for markers (see cobe's `U()` in
+ * dist/index.esm.js), pre-scaled to the marker's elevated radius.
+ */
+function locationToProjectionVector(lat: number, lng: number): [number, number, number] {
+  const latRad = (lat * Math.PI) / 180;
+  const lngRad = (lng * Math.PI) / 180 - Math.PI;
+  const cosLat = Math.cos(latRad);
+  const x = -cosLat * Math.cos(lngRad);
+  const y = Math.sin(latRad);
+  const z = cosLat * Math.sin(lngRad);
+  return [x * PROJECTION_RADIUS, y * PROJECTION_RADIUS, z * PROJECTION_RADIUS];
+}
+
+const OFFICE_VECTORS: [number, number, number][] = OFFICES.map((office) =>
+  locationToProjectionVector(office.lat, office.lng),
+);
+
+type MarkerProjection = { x: number; y: number; opacity: number; scale: number };
+
+/**
+ * Projects an office's pre-computed sphere vector onto the canvas for the
+ * globe's current `phi`/`theta`, reproducing cobe's own marker projection
+ * (see the `O()` function in cobe's dist/index.esm.js) so the DOM ring lands
+ * exactly where cobe's built-in dot would.
+ */
+function projectMarker(
+  vector: [number, number, number],
+  phi: number,
+  theta: number,
+  radius: number,
+): MarkerProjection {
+  const cosPhi = Math.cos(phi);
+  const sinPhi = Math.sin(phi);
+  const cosTheta = Math.cos(theta);
+  const sinTheta = Math.sin(theta);
+  const [tx, ty, tz] = vector;
+
+  const vx = cosPhi * tx + sinPhi * tz;
+  const vy = sinPhi * sinTheta * tx + cosTheta * ty - cosPhi * sinTheta * tz;
+  const vzRaw = -sinPhi * cosTheta * tx + sinTheta * ty + cosPhi * cosTheta * tz;
+  const vz = vzRaw / PROJECTION_RADIUS;
+
+  const x = radius + radius * vx;
+  const y = radius - radius * vy;
+
+  let opacity: number;
+  let scale: number;
+  if (vz < 0) {
+    opacity = 0;
+    scale = 0.6;
+  } else if (vz < LIMB_FADE_END) {
+    const t = vz / LIMB_FADE_END;
+    opacity = t;
+    scale = 0.6 + 0.4 * t;
+  } else {
+    opacity = 1;
+    scale = 1;
+  }
+
+  return { x, y, opacity, scale };
+}
+
 export default function GlobalReach() {
   const reduceMotion = useReducedMotion();
   const [focused, setFocused] = useState<string | null>(null);
 
   const containerRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const markerElRefs = useRef<(HTMLDivElement | null)[]>([]);
 
   const focusedRef = useRef<string | null>(null);
   const reduceMotionRef = useRef(false);
@@ -91,6 +166,17 @@ export default function GlobalReach() {
     resizeObserver.observe(container);
     window.addEventListener("resize", onResize);
 
+    const applyMarkerProjections = (phi: number, theta: number) => {
+      const radius = widthRef.current / 2;
+      for (let index = 0; index < OFFICES.length; index += 1) {
+        const el = markerElRefs.current[index];
+        if (!el) continue;
+        const projection = projectMarker(OFFICE_VECTORS[index], phi, theta, radius);
+        el.style.transform = `translate(${projection.x}px, ${projection.y}px) translate(-50%, -50%) scale(${projection.scale})`;
+        el.style.opacity = String(projection.opacity);
+      }
+    };
+
     const globe = createGlobe(canvas, {
       devicePixelRatio: 2,
       width: widthRef.current * 2,
@@ -102,14 +188,17 @@ export default function GlobalReach() {
       mapSamples: 28000,
       mapBrightness: 5,
       baseColor: [0.8, 0.83, 0.81],
-      markerColor: MARKER_COLOR,
+      markerColor: [0.08, 0.5, 0.37],
       glowColor: [1, 1, 1],
       opacity: 0.92,
-      markers: OFFICES.map((office) => ({
-        location: [office.lat, office.lng],
-        size: MARKER_SIZE,
-      })) satisfies Marker[],
+      // Office markers are rendered as a custom DOM overlay (see below), not
+      // cobe's built-in dots.
+      markers: [],
     });
+
+    // Position the DOM markers before the first paint so they never flash
+    // at the container's top-left corner.
+    applyMarkerProjections(currentPhi, currentTheta);
 
     // cobe v2 has no per-frame render callback — the caller must drive
     // rotation and texture refresh itself by calling `globe.update(...)`
@@ -135,19 +224,17 @@ export default function GlobalReach() {
         }
       }
 
+      const renderPhi = currentPhi + pointerInteractionMovement.current / 200;
+      const renderTheta = currentTheta;
+
       globe.update({
-        phi: currentPhi + pointerInteractionMovement.current / 200,
-        theta: currentTheta,
+        phi: renderPhi,
+        theta: renderTheta,
         width: widthRef.current * 2,
         height: widthRef.current * 2,
-        markers: OFFICES.map((office) => ({
-          location: [office.lat, office.lng],
-          size:
-            focusedRef.current === office.name
-              ? MARKER_SIZE_FOCUSED
-              : MARKER_SIZE,
-        })) satisfies Marker[],
       });
+
+      applyMarkerProjections(renderPhi, renderTheta);
 
       animationFrame = requestAnimationFrame(frame);
     };
@@ -266,6 +353,37 @@ export default function GlobalReach() {
                 onPointerOut={() => updatePointerInteraction(null)}
                 onPointerMove={(event) => updateMovement(event.clientX)}
               />
+
+              {OFFICES.map((office, index) => {
+                const isFocused = focused === office.name;
+                return (
+                  <div
+                    key={office.name}
+                    ref={(el) => {
+                      markerElRefs.current[index] = el;
+                    }}
+                    aria-hidden="true"
+                    className="pointer-events-none absolute left-0 top-0 opacity-0"
+                  >
+                    <span className="relative flex items-center justify-center">
+                      {isFocused ? (
+                        <span
+                          aria-hidden="true"
+                          className="absolute h-[18px] w-[18px] rounded-full bg-brand-light/60 motion-safe:animate-marker-pulse motion-reduce:animate-none"
+                        />
+                      ) : null}
+                      <span
+                        className={`rounded-full border-[2.5px] bg-transparent transition-[width,height,border-color] duration-300 ease-out ${
+                          isFocused
+                            ? "h-[18px] w-[18px] border-brand-light"
+                            : "h-[10px] w-[10px] border-brand"
+                        }`}
+                        style={{ boxShadow: "0 0 0 2px rgba(255,255,255,0.85)" }}
+                      />
+                    </span>
+                  </div>
+                );
+              })}
 
               <AnimatePresence>
                 {focused ? (
