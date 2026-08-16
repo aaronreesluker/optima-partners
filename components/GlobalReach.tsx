@@ -420,21 +420,13 @@ export default function GlobalReach() {
                           fill="none"
                           stroke={`url(#${gradientId})`}
                           strokeWidth="8.5"
+                          className={
+                            isFocused
+                              ? "motion-safe:animate-marker-orbit motion-reduce:animate-none"
+                              : undefined
+                          }
+                          style={{ transformBox: "fill-box", transformOrigin: "center" }}
                         />
-                        {isFocused ? (
-                          <circle
-                            cx="16"
-                            cy="16"
-                            r="15.5"
-                            fill="none"
-                            stroke="#212B5F"
-                            strokeWidth="2"
-                            strokeLinecap="round"
-                            strokeDasharray="12 85"
-                            className="motion-safe:animate-marker-orbit motion-reduce:animate-none"
-                            style={{ transformBox: "fill-box", transformOrigin: "center" }}
-                          />
-                        ) : null}
                       </svg>
                     </span>
                   </button>

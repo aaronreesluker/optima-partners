@@ -28,7 +28,7 @@ const config: Config = {
         },
       },
       animation: {
-        "marker-orbit": "marker-orbit 2.2s linear infinite",
+        "marker-orbit": "marker-orbit 3.2s linear infinite",
       },
     },
   },
